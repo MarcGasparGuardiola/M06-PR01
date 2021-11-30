@@ -24,17 +24,17 @@ module.exports = {
         new HtmlWebpackPlugin({
             filename: 'index.html',
             template: './src/index.html',
-            chunks: ['index'],
+            chunks: ['polyfill', 'index'],
         }),
         new HtmlWebpackPlugin({
             filename: 'loadplayer.html',
             template: './src/loadplayer.html',
-            chunks: ['loadplayer'],
+            chunks: ['polyfill', 'loadplayer'],
         }),
         new HtmlWebpackPlugin({
             filename: 'myteam.html',
             template: 'src/myteam.html',
-            chunks: ['myteam'],
+            chunks: ['polyfill', 'myteam'],
         }),
         new MiniCssExtractPlugin(),
     ],
