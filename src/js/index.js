@@ -1,74 +1,64 @@
-// Example starter JavaScript for disabling form submissions if there are invalid fields
-(function () {
-    "use strict";
-
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    var forms = document.querySelectorAll(".needs-validation");
-
-    // Loop over them and prevent submission
-    Array.prototype.slice.call(forms).forEach(function (form) {
-        form.addEventListener(
-            "submit",
-            function (event) {
-                if (!form.checkValidity()) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-
-                form.classList.add("was-validated");
-            },
-            false
-        );
-    });
-})();
+import {User} from "./User"
 
 const forms = document.querySelector('.needs-validation')
 const fullName = document.getElementById("fullName");
 const userName = document.getElementById("userName");
 const email = document.getElementById("validationEmail");
-const submit = document.getElementById('submit')
+const submit = document.getElementById('submit');
+const password = document.getElementById('password');
+let users = [];
 
 const regex = {
     userName: /^[A-Za-z ]+$/,
     email: /^\w+([\.\+\-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/,
+    password: /^[A-Za-z0-9]{5}$/,
 }
 
 function isUserName(userName) {return regex.userName.test(userName)}
 function isEmail(email) {return regex.email.test(email)}
+function isPassword(password) {return regex.password.test(password)}
 
-function setGreen() {
-    forms.classList.add("was-validated");
+function setGreen(input) {
+    return input.classList.add("is-valid");
 }
-function setRed() {
-    forms.classList.add("form-control.is-invalid form-control.invalid");
+function setRed(input) {
+    return input.classList.add("is-invalid");
 }
 
 forms.addEventListener("keyup", (e) => {
-    e.stopPropagation()
     switch(e.target){
         case userName:
-            isUserName(e.target.value) ? setGreen() : setRed()
+            isUserName(e.target.value) ? setGreen(e.target) : setRed(e.target)
             break;
         case email:
-            isEmail(e.target.value) ? setGreen() : setRed()
+            isEmail(e.target.value) ? setGreen(e.target) : setRed(e.target)
             break;
         case fullName:
-            isUserName(e.target.value) ? setGreen() : setRed()
+            isUserName(e.target.value) ? setGreen(e.target) : setRed(e.target)
             break;
+        case password:
+            isPassword(e.target.value) ? setGreen(e.target) : setRed(e.target)
         default:
             break;
     }
 })
 
-submit.addEventListener('submit', (e) => {
+
+submit.addEventListener('click', (e) => {
+    e.preventDefault()
     postRequest()
+    getRequest()
+    let user = new User(userName.value, fullName.value, email.value, password.value)
+    users.push(user)
+    console.log(users)
+    sessionStorage.setItem('usersArray', JSON.stringify(users))
 })
+
 
 function postRequest() {
     fetch("https://jsonplaceholder.typicode.com/users", {
         method: "POST",
         body: JSON.stringify({
-            id: "12",
             name: fullName.value,
             username: userName.value,
             email: email.value,
@@ -86,25 +76,3 @@ function getRequest() {
         .then((response) => response.json())
         .then((json) => console.log(json));
 }
-
-function validation(params) {
-    
-}
-
-/* 
-async function request(url, verb) {
-    try {
-        const result = await fetch(url, {
-            method: verb,
-        });
-        const data = await result.json();
-        if (result.status !== 200) {
-            return false;
-        }
-        return data;
-    } catch (error) {
-        console.error(error.message);
-        return false;
-    }
-}
- */
