@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = {
     entry: {
         index: './src/js/login/login.js',
-        user: './src/js/Users.js',
+        user: './src/js/User.js',
         polyfill: 'babel-polyfill',
         loadplayer: './src/js/loadPlayer.js',
         myteam: './src/js/myTeam/myTeam.js',
