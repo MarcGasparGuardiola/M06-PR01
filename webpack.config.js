@@ -3,18 +3,31 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-    entry: ['babel-polyfill', './src/js/index.js'],
+    entry: {
+        polyfill: 'babel-polyfill',
+        loadplayer: './src/js/loadPlayer.js',
+        myteam: './src/js/myTeam/myTeam.js',
+    },
     output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'js/bundle.js',
+        path: path.resolve(__dirname, 'build', 'target'),
+        publicPath: '/',
+        filename: '[name].bundle.js',
+        chunkFilename: '[id].bundle_[chunkhash].js',
+        sourceMapFilename: '[file].map',
     },
     devServer: {
         static: './dist',
     },
     plugins: [
         new HtmlWebpackPlugin({
-            filename: 'index.html',
+            filename: 'loadplayer.html',
             template: './src/index.html',
+            chunks: ['loadplayer'],
+        }),
+        new HtmlWebpackPlugin({
+            filename: 'myteam.html',
+            template: 'src/myteam.html',
+            chunks: ['myteam'],
         }),
         new MiniCssExtractPlugin(),
     ],

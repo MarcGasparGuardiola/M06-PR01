@@ -1,5 +1,26 @@
 // import '../css/index.css';
 
+function saveList(list) {
+    try {
+        localStorage.setItem('favouritePlayers', JSON.stringify(list));
+    } catch (e) {
+        window.alert(e.message);
+    }
+}
+
+function getFavouritePlayers() {
+    try {
+        const list = JSON.parse(localStorage.getItem('favouritePlayers'));
+        console.log(list);
+        if (!list) {
+            return { status: false };
+        }
+        return { status: true, list };
+    } catch (e) {
+        return { status: false, error: e };
+    }
+}
+
 /* eslint-disable max-len */
 /* eslint-disable prefer-template */
 async function doRequest(url, params, verb, jsonResponse) {
@@ -43,10 +64,20 @@ const playerImg = document.getElementById('playerImg');
 const playerName = document.getElementById('playerName');
 const playerSurname = document.getElementById('playerSurname');
 const playerAge = document.getElementById('playerAge');
+const starPlayer = document.getElementById('starPLayer');
+
+let favouritePlayers = getFavouritePlayers();
+let player = null;
+
+function removeFavouritePlayerFromList(id) {
+    favouritePlayers.list = favouritePlayers.list.filter((playerElm) => playerElm.id !== id);
+    saveList(favouritePlayers.list);
+    return favouritePlayers.list;
+}
 
 async function load() {
     const dataToPass = {
-        id: 154,
+        id: 144,
         league: 140,
         season: 2020,
     };
@@ -61,7 +92,7 @@ async function load() {
         playerSurname.innerText = '';
         playerAge.innerText = '';
         // Create player detail view
-        const { player } = response.response[0];
+        player = response.response[0].player;
         console.log(player);
         playerImg.src = player.photo;
         playerName.innerText = `Player name: ${player.firstname}`;
@@ -76,6 +107,23 @@ async function load() {
 
 document.addEventListener('DOMContentLoaded', () => {
     load();
+
+    if (favouritePlayers.status === false) {
+        favouritePlayers = [];
+    }
+});
+
+starPlayer.addEventListener('click', () => {
+    console.log(player);
+    if (starPlayer.innerText === 'star') {
+        starPlayer.innerText = 'star_border';
+        removeFavouritePlayerFromList(player.id);
+    } else {
+        starPlayer.innerText = 'star';
+        console.log(favouritePlayers);
+        favouritePlayers.list.push(player);
+        saveList(favouritePlayers.list);
+    }
 });
 
 // async function request(url, verb) {
