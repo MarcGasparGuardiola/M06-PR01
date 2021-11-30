@@ -4,6 +4,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
     entry: {
+        index: './src/js/login/login.js',
+        user: './src/js/Users.js',
         polyfill: 'babel-polyfill',
         loadplayer: './src/js/loadPlayer.js',
         myteam: './src/js/myTeam/myTeam.js',
@@ -20,8 +22,13 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            filename: 'loadplayer.html',
+            filename: 'index.html',
             template: './src/index.html',
+            chunks: ['index'],
+        }),
+        new HtmlWebpackPlugin({
+            filename: 'loadplayer.html',
+            template: './src/loadplayer.html',
             chunks: ['loadplayer'],
         }),
         new HtmlWebpackPlugin({
