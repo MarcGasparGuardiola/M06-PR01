@@ -1,4 +1,4 @@
-import {User} from "./User"
+import {User} from "../User"
 
 const forms = document.querySelector('.needs-validation')
 const fullName = document.getElementById("fullName");
