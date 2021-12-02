@@ -7,6 +7,7 @@ module.exports = {
         index: './src/js/login/login.js',
         user: './src/js/User.js',
         polyfill: 'babel-polyfill',
+        teams: './src/js/teams.js',
         loadplayer: './src/js/loadPlayer.js',
         myteam: './src/js/myTeam/myTeam.js',
     },
@@ -25,6 +26,11 @@ module.exports = {
             filename: 'index.html',
             template: './src/index.html',
             chunks: ['polyfill', 'index'],
+        }),
+        new HtmlWebpackPlugin({
+            filename: 'teams.html',
+            template: './src/teams.html',
+            chunks: ['polyfill', 'teams'],
         }),
         new HtmlWebpackPlugin({
             filename: 'loadplayer.html',

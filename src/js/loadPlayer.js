@@ -113,6 +113,7 @@ async function load() {
 
 document.addEventListener('DOMContentLoaded', () => {
     load();
+    
 
     if (favouritePlayers.status === false) {
         favouritePlayers.list = [];
