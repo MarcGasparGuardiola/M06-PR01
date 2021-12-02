@@ -37,14 +37,12 @@ async function doRequest(url, params, verb, jsonResponse) {
 
 const itemHTML = `
     <tr>
-        <td>$$TEAM_NAME$$</td>
-        <img src="$$TEAM_LOGO$$"><td>
+        <td style="align-text: center">$$TEAM_NAME$$</td>
+        <td><img src="$$TEAM_LOGO$$" style="width: 125px; height: 125px"></td>
     </tr>
 `;
 
 const table = document.getElementById('tableBody');
-const teamImg = document.getElementById('teamImg');
-const teamName = document.getElementById('teamName');
 let team = null;
 
 async function load() {
@@ -59,20 +57,11 @@ async function load() {
     console.log(response);
     // Si no errors
     if (error !== []) {
-        /*
-        teamImg.src = '';
-        teamName.innerText = '';
-        team = response.response[0].team;
-        console.log(team);
-        teamImg.src = team.logo;
-        teamName.innerText = `Team name: ${team.name}`;
-        */
         
         response.response.forEach((team) => {
             let str = '';
             str = itemHTML.replace('$$TEAM_NAME$$', team.team.name);
             str = str.replace('$$TEAM_LOGO$$', team.team.logo);
-            console.log(str);
             table.insertAdjacentHTML('beforeEnd', str);
         });
         
