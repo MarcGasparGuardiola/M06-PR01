@@ -66,19 +66,20 @@ const playerSurname = document.getElementById('playerSurname');
 const playerAge = document.getElementById('playerAge');
 const starPlayer = document.getElementById('starPLayer');
 
-let favouritePlayers = getFavouritePlayers();
-let player = null;
+let teams = getFavouritePlayers();
+let team = null;
 
 function removeFavouritePlayerFromList(id) {
-    favouritePlayers.list = favouritePlayers.list.filter((playerElm) => playerElm.id !== id);
-    saveList(favouritePlayers.list);
-    return favouritePlayers.list;
+    teams.list = teams.list.filter((playerElm) => playerElm.id !== id);
+    saveList(teams.list);
+    return teams.list;
 }
 
 async function load() {
     const dataToPass = {
-        id: 33,
-        country: "England",
+        id: 144,
+        league: 140,
+        season: 2020,
     };
     const response = await doRequest('https://v3.football.api-sports.io/players', dataToPass, 'GET');
     const { error } = response;
@@ -91,12 +92,12 @@ async function load() {
         playerSurname.innerText = '';
         playerAge.innerText = '';
         // Create player detail view
-        player = response.response[0].player;
-        console.log(player);
-        playerImg.src = player.photo;
-        playerName.innerText = `Player name: ${player.firstname}`;
-        playerSurname.innerText = `Player lastname: ${player.lastname}`;
-        playerAge.innerText = `Age: ${player.age}`;
+        team = response.response[0].player;
+        console.log(team);
+        playerImg.src = team.photo;
+        playerName.innerText = `Player name: ${team.firstname}`;
+        playerSurname.innerText = `Player lastname: ${team.lastname}`;
+        playerAge.innerText = `Age: ${team.age}`;
     } else {
         console.log(error.join(' '));
     }
@@ -106,22 +107,23 @@ async function load() {
 
 document.addEventListener('DOMContentLoaded', () => {
     load();
+    
 
-    if (favouritePlayers.status === false) {
-        favouritePlayers = [];
+    if (teams.status === false) {
+        teams = [];
     }
 });
 
 starPlayer.addEventListener('click', () => {
-    console.log(player);
+    console.log(team);
     if (starPlayer.innerText === 'star') {
         starPlayer.innerText = 'star_border';
-        removeFavouritePlayerFromList(player.id);
+        removeFavouritePlayerFromList(team.id);
     } else {
         starPlayer.innerText = 'star';
-        console.log(favouritePlayers);
-        favouritePlayers.list.push(player);
-        saveList(favouritePlayers.list);
+        console.log(teams);
+        teams.list.push(team);
+        saveList(teams.list);
     }
 });
 
