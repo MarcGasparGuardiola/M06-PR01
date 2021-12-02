@@ -77,9 +77,8 @@ function removeFavouritePlayerFromList(id) {
 
 async function load() {
     const dataToPass = {
-        id: 144,
-        league: 140,
-        season: 2020,
+        id: 33,
+        country: "England",
     };
     const response = await doRequest('https://v3.football.api-sports.io/players', dataToPass, 'GET');
     const { error } = response;

@@ -62,7 +62,7 @@ submit.addEventListener('click', (e) => {
     users.push(user)
     console.log(users)
     sessionStorage.setItem('usersArray', JSON.stringify(users))
-    window.location.href = '../../loadplayer.html'
+    window.location.href = '../../teams.html'
 })
 
 
