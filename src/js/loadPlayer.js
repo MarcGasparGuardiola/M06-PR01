@@ -66,18 +66,22 @@ const playerSurname = document.getElementById('playerSurname');
 const playerAge = document.getElementById('playerAge');
 const starPlayer = document.getElementById('starPLayer');
 
-let favouritePlayers = getFavouritePlayers();
-let player = null;
+const favouritePlayers = getFavouritePlayers();
+let selectedPlayer = null;
 
 function removeFavouritePlayerFromList(id) {
-    favouritePlayers.list = favouritePlayers.list.filter((playerElm) => playerElm.id !== id);
+    favouritePlayers.list = favouritePlayers.list.filter((playerElm) =>
+    {
+        console.log(playerElm);
+        return playerElm.player.id !== id;
+    });
     saveList(favouritePlayers.list);
     return favouritePlayers.list;
 }
 
 async function load() {
     const dataToPass = {
-        id: 144,
+        id: 154,
         league: 140,
         season: 2020,
     };
@@ -92,12 +96,14 @@ async function load() {
         playerSurname.innerText = '';
         playerAge.innerText = '';
         // Create player detail view
-        player = response.response[0].player;
-        console.log(player);
-        playerImg.src = player.photo;
-        playerName.innerText = `Player name: ${player.firstname}`;
-        playerSurname.innerText = `Player lastname: ${player.lastname}`;
-        playerAge.innerText = `Age: ${player.age}`;
+        const privatePlayer = response.respone[0];
+        selectedPlayer = privatePlayer;
+        console.log(selectedPlayer.player);
+        console.log(selectedPlayer.statics);
+        playerImg.src = selectedPlayer.player.photo;
+        playerName.innerText = `Player name: ${selectedPlayer.player.firstname}`;
+        playerSurname.innerText = `Player lastname: ${selectedPlayer.player.lastname}`;
+        playerAge.innerText = `Age: ${selectedPlayer.player.age}`;
     } else {
         console.log(error.join(' '));
     }
@@ -109,35 +115,19 @@ document.addEventListener('DOMContentLoaded', () => {
     load();
 
     if (favouritePlayers.status === false) {
-        favouritePlayers = [];
+        favouritePlayers.list = [];
     }
 });
 
 starPlayer.addEventListener('click', () => {
-    console.log(player);
+    console.log(selectedPlayer);
     if (starPlayer.innerText === 'star') {
         starPlayer.innerText = 'star_border';
-        removeFavouritePlayerFromList(player.id);
+        removeFavouritePlayerFromList(selectedPlayer.player.id);
     } else {
         starPlayer.innerText = 'star';
         console.log(favouritePlayers);
-        favouritePlayers.list.push(player);
+        favouritePlayers.list.push(selectedPlayer);
         saveList(favouritePlayers.list);
     }
 });
-
-// async function request(url, verb) {
-//     try {
-//         const result = await fetch(url, {
-//             method: verb,
-//         });
-//         const data = await result.json();
-//         if (result.status !== 200) {
-//             return false;
-//         }
-//         return data;
-//     } catch (error) {
-//         console.error(error.message);
-//         return false;
-//     }
-// }
