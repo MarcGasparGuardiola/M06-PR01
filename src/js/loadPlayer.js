@@ -11,7 +11,6 @@ function saveList(list) {
 function getFavouritePlayers() {
     try {
         const list = JSON.parse(localStorage.getItem('favouritePlayers'));
-        console.log(list);
         if (!list) {
             return { status: false };
         }
@@ -70,25 +69,20 @@ const favouritePlayers = getFavouritePlayers();
 let selectedPlayer = null;
 
 function removeFavouritePlayerFromList(id) {
-    favouritePlayers.list = favouritePlayers.list.filter((playerElm) =>
-    {
-        console.log(playerElm);
-        return playerElm.player.id !== id;
-    });
+    favouritePlayers.list = favouritePlayers.list.filter((playerElm) => playerElm.player.id !== id);
     saveList(favouritePlayers.list);
     return favouritePlayers.list;
 }
 
 async function load() {
     const dataToPass = {
-        id: 154,
+        id: 47193,
         league: 140,
         season: 2020,
     };
     const response = await doRequest('https://v3.football.api-sports.io/players', dataToPass, 'GET');
     const { error } = response;
 
-    console.log(response);
     // Si no errors
     if (error !== []) {
         playerImg.src = '';
@@ -96,10 +90,8 @@ async function load() {
         playerSurname.innerText = '';
         playerAge.innerText = '';
         // Create player detail view
-        const privatePlayer = response.respone[0];
+        const privatePlayer = response.response[0];
         selectedPlayer = privatePlayer;
-        console.log(selectedPlayer.player);
-        console.log(selectedPlayer.statics);
         playerImg.src = selectedPlayer.player.photo;
         playerName.innerText = `Player name: ${selectedPlayer.player.firstname}`;
         playerSurname.innerText = `Player lastname: ${selectedPlayer.player.lastname}`;
@@ -107,13 +99,11 @@ async function load() {
     } else {
         console.log(error.join(' '));
     }
-
-    console.log(response);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     load();
-    
+
 
     if (favouritePlayers.status === false) {
         favouritePlayers.list = [];
@@ -121,13 +111,11 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 starPlayer.addEventListener('click', () => {
-    console.log(selectedPlayer);
     if (starPlayer.innerText === 'star') {
         starPlayer.innerText = 'star_border';
         removeFavouritePlayerFromList(selectedPlayer.player.id);
     } else {
         starPlayer.innerText = 'star';
-        console.log(favouritePlayers);
         favouritePlayers.list.push(selectedPlayer);
         saveList(favouritePlayers.list);
     }
