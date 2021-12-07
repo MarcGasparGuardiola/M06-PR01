@@ -1,63 +1,5 @@
 // import '../css/index.css';
-
-function saveList(list) {
-    try {
-        localStorage.setItem('favouritePlayers', JSON.stringify(list));
-    } catch (e) {
-        window.alert(e.message);
-    }
-}
-
-function getFavouritePlayers() {
-    try {
-        const list = JSON.parse(localStorage.getItem('favouritePlayers'));
-        if (!list) {
-            return { status: false };
-        }
-        return { status: true, list };
-    } catch (e) {
-        return { status: false, error: e };
-    }
-}
-
-/* eslint-disable max-len */
-/* eslint-disable prefer-template */
-async function doRequest(url, params, verb, jsonResponse) {
-    return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.addEventListener('readystatechange', () => {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                let response = (xhr.responseText && (xhr.responseText.length > 0)) ? xhr.responseText : true;
-                if ((jsonResponse === undefined) || jsonResponse) {
-                    response = JSON.parse(xhr.responseText);
-                }
-                return resolve(response);
-            } if (xhr.readyState === 4) {
-                let response = (xhr.responseText && (xhr.responseText.length > 0)) ? xhr.responseText : false;
-                if ((jsonResponse === undefined) || jsonResponse) {
-                    response = JSON.parse(xhr.responseText);
-                }
-                return reject(response);
-            }
-        });
-        let finalUrl = url;
-
-        if (params) {
-            const stringParams = Object.keys(params).map((k) => encodeURIComponent(k) + '=' + encodeURIComponent(params[k])).join('&');
-
-            if (stringParams.length > 0) {
-                finalUrl = url + '?' + stringParams;
-            }
-        }
-
-        xhr.open(verb, finalUrl);
-
-        xhr.setRequestHeader('x-rapidapi-key', 'ebfa151c4637db0f313a47b7489e3770');
-        xhr.setRequestHeader('x-rapidapi-host', 'v3.football.api-sports.io');
-
-        xhr.send();
-    });
-}
+import * as helperFunctions from './helpers/helper';
 
 const playerImg = document.getElementById('playerImg');
 const playerName = document.getElementById('playerName');
@@ -65,14 +7,8 @@ const playerSurname = document.getElementById('playerSurname');
 const playerAge = document.getElementById('playerAge');
 const starPlayer = document.getElementById('starPLayer');
 
-const favouritePlayers = getFavouritePlayers();
+const favouritePlayers = helperFunctions.getList('favouritePlayers');
 let selectedPlayer = null;
-
-function removeFavouritePlayerFromList(id) {
-    favouritePlayers.list = favouritePlayers.list.filter((playerElm) => playerElm.player.id !== id);
-    saveList(favouritePlayers.list);
-    return favouritePlayers.list;
-}
 
 async function load() {
     const dataToPass = {
@@ -80,7 +16,7 @@ async function load() {
         league: 140,
         season: 2020,
     };
-    const response = await doRequest('https://v3.football.api-sports.io/players', dataToPass, 'GET');
+    const response = await helperFunctions.doRequest('https://v3.football.api-sports.io/players', dataToPass, 'GET');
     const { error } = response;
 
     // Si no errors
@@ -96,6 +32,13 @@ async function load() {
         playerName.innerText = `Player name: ${selectedPlayer.player.firstname}`;
         playerSurname.innerText = `Player lastname: ${selectedPlayer.player.lastname}`;
         playerAge.innerText = `Age: ${selectedPlayer.player.age}`;
+
+        console.log(favouritePlayers);
+        if (helperFunctions.checkPlayerIsInList(favouritePlayers.list, selectedPlayer.player.id)) {
+            starPlayer.innerText = 'star';
+        } else {
+            starPlayer.innerText = 'star_border';
+        }
     } else {
         console.log(error.join(' '));
     }
@@ -103,7 +46,6 @@ async function load() {
 
 document.addEventListener('DOMContentLoaded', () => {
     load();
-
 
     if (favouritePlayers.status === false) {
         favouritePlayers.list = [];
@@ -113,10 +55,11 @@ document.addEventListener('DOMContentLoaded', () => {
 starPlayer.addEventListener('click', () => {
     if (starPlayer.innerText === 'star') {
         starPlayer.innerText = 'star_border';
-        removeFavouritePlayerFromList(selectedPlayer.player.id);
+        favouritePlayers.list = helperFunctions.removePlayerFromLocalStorageList('favouritePlayers', favouritePlayers.list, selectedPlayer.player.id);
+        helperFunctions.removePlayerFromMyTeam(favouritePlayers.list);
     } else {
         starPlayer.innerText = 'star';
         favouritePlayers.list.push(selectedPlayer);
-        saveList(favouritePlayers.list);
+        helperFunctions.saveList('favouritePlayers', favouritePlayers.list);
     }
 });

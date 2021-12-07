@@ -10,6 +10,7 @@ module.exports = {
         teams: './src/js/teams.js',
         loadplayer: './src/js/loadPlayer.js',
         myteam: './src/js/myTeam/myTeam.js',
+        helper: './src/js/helpers/helper.js',
     },
     output: {
         path: path.resolve(__dirname, 'build', 'target'),
