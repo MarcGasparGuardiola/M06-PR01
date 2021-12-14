@@ -64,7 +64,7 @@ export async function doRequest(url, params, verb, jsonResponse) {
 
         xhr.open(verb, finalUrl);
 
-        xhr.setRequestHeader('x-rapidapi-key', 'ebfa151c4637db0f313a47b7489e3770');
+        xhr.setRequestHeader('x-rapidapi-key', 'b8e3f84170115e163466d456511a18a5');
         xhr.setRequestHeader('x-rapidapi-host', 'v3.football.api-sports.io');
 
         xhr.send();

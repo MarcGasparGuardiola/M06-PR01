@@ -1,0 +1,1 @@
+function _classCallCheck(s,a){if(!(s instanceof a))throw new TypeError("Cannot call a class as a function")}export var User=function s(a,l,t,e){_classCallCheck(this,s),this.userName=a,this.fullName=l,this.email=t,this.password=e};

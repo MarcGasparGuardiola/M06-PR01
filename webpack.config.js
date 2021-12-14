@@ -55,7 +55,7 @@ module.exports = {
                 },
             },
             {
-                test: /\.css$/,
+                test: /\.css$/i,
                 use: [
                     MiniCssExtractPlugin.loader, // instead of style-loader
                     'css-loader',
@@ -63,7 +63,19 @@ module.exports = {
             },
             {
                 test: /\.(png|svg|jpg|jpeg|gif)$/i,
-                type: 'asset/resource',
+                use:
+                {
+                    loader: 'file-loader',
+                    options: {
+                        name: '[name].[ext]',
+                        outputPath: 'img/',
+                        publicPath: 'img/',
+                    },
+                },
+            },
+            {
+                test: /\.html$/i,
+                use: ['html-loader'],
             },
         ],
     },

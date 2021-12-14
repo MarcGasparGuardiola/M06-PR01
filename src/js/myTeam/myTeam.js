@@ -14,9 +14,9 @@ const playerRow = `
 `;
 
 const playerCard = `
-<div class="$$COL-CLASS$$" draggable="true" style="text-align: center;">
+<div class="$$COL-CLASS$$" draggable="true" style="text-align: center; background-color: rgba(255, 255, 255, 0.7);};">
     <i class="bi bi-x"></i>
-    <img src="$$PLAYER_IMG$$" style="width: 45px; height: 45px;">
+    <img src="$$PLAYER_IMG$$" style="width: 65px; height: 65px;">
     <p>$$PLAYER_NAME$$</p>
     <p hidden>$$PLAYER_ID$$</p>
 </div>
@@ -35,11 +35,9 @@ const playerModal = new bootstrap.Modal(document.getElementById('playerModal'), 
 
 let idDraged = 0;
 const dropZone = document.getElementById('dropZone');
-const myTeamTable = document.getElementById('myTeamTable');
-
 
 let maxAttackers = 3;
-let maxMidfielders = 1;
+let maxMidfielders = 3;
 let maxDefenders = 4;
 let maxGoalkepers = 1;
 
@@ -55,6 +53,38 @@ function getFavouritePlayers() {
 //const favouritePlayers = getFavouritePlayers();
 const favouritePlayers = { list: mockPlayers, status: true };
 let myTeam = helperFunctions.getList('myTeam').list ? helperFunctions.getList('myTeam').list : [];
+
+function getTargetDiv(position) {
+ 
+    switch (position) {
+        case 'Attacker':
+            return document.getElementById('attackers');
+        case 'Midfielder':
+            return document.getElementById('middlers');
+        case 'Defender':
+            return document.getElementById('defenders');
+        case 'Goalkeeper':
+            return document.getElementById('goalkeaper');
+        default:
+            return false;
+    }
+}
+
+function generateMyTeamUI() {
+    myTeam.forEach((player) => {
+        let str = '';
+        str = playerCard.replace('$$PLAYER_ID$$', player.player.id);
+        str = str.replace('$$PLAYER_NAME$$', player.player.name);
+        str = str.replace('$$PLAYER_IMG$$', player.player.photo);
+
+        // TODO Change class in function of position of player and lineup
+        const rowClass = getMaxOfPosition(player.statistics[player.statistics.length - 1].games.position);
+        str = str.replace('$$COL-CLASS$$', `col-${rowClass}`);
+        const targetDiv = getTargetDiv(player.statistics[player.statistics.length - 1].games.position);
+
+        targetDiv.insertAdjacentHTML('beforeEnd', str);
+    });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     noPlayers.setAttribute('hidden', 'true');
@@ -149,6 +179,7 @@ function checkNumberOfPlayers() {
 function checkPositionOfPlayer(position) {
     const numberOfPlayersInPosition = myTeam.filter((player) => player.statistics[player.statistics.length - 1].games.position === position).length
 
+    console.log(numberOfPlayersInPosition);
     switch (position) {
         case 'Attacker':
             return numberOfPlayersInPosition < maxAttackers;
@@ -168,6 +199,21 @@ function checkPositionOfPlayer(position) {
     }
 }
 
+
+function getMaxOfPosition(position) {
+    switch (position) {
+        case 'Attacker':
+            return Math.floor(12 / maxAttackers);
+        case 'Midfielder':
+            return Math.floor(12 / maxMidfielders);
+        case 'Defender':
+            return Math.floor(12 / maxDefenders);
+        case 'Goalkeeper':
+            return Math.floor(12 / maxGoalkepers);
+        default:
+            return 12;
+    }
+}
 
 dropZone.addEventListener('drop', (e) => {
     //console.log(idDraged);
@@ -191,7 +237,8 @@ dropZone.addEventListener('drop', (e) => {
     str = str.replace('$$PLAYER_IMG$$', player.player.photo);
 
     // TODO Change class in function of position of player and lineup
-    str = str.replace('$$COL-CLASS$$', 'col-3');
+    const rowClass = getMaxOfPosition(player.statistics[player.statistics.length - 1].games.position);
+    str = str.replace('$$COL-CLASS$$', `col-${rowClass}`);
     const closestDiv = e.target.closest('div');
     if (!helperFunctions.checkPlayerIsInList(myTeam, player.player.id)) {
         myTeam.push(player);
@@ -208,11 +255,11 @@ dropZone.addEventListener('drop', (e) => {
 
 dropZone.addEventListener('click', (e) => {
     e.preventDefault();
-    if (e.target.matches('div *')) { 
+    if (e.target.matches('div *')) {
         const closestDiv = e.target.closest('div');
         const id = closestDiv.getElementsByTagName('p')[1].innerText;
         console.log(id);
-        myTeam = helperFunctions.removePlayerFromListById(myTeam ,id);
+        myTeam = helperFunctions.removePlayerFromListById(myTeam, id);
         console.log(myTeam);
         helperFunctions.saveList('myTeam', myTeam);
         const parentDiv = closestDiv.parentElement;
@@ -222,11 +269,12 @@ dropZone.addEventListener('click', (e) => {
 
 document.addEventListener('DOMContentLoaded', () => {
     setOpenModal();
+    generateMyTeamUI()
 });
 
 let toastElList = [].slice.call(document.querySelectorAll('.toast'))
 let toastList = toastElList.map(function (toastEl) {
-  return new bootstrap.Toast(toastEl)
+    return new bootstrap.Toast(toastEl)
 })
 
 
