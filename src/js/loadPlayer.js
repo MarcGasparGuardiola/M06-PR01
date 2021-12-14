@@ -1,22 +1,50 @@
 // import '../css/index.css';
 import * as helperFunctions from './helpers/helper';
 
-const playerImg = document.getElementById('playerImg');
-const playerName = document.getElementById('playerName');
-const playerSurname = document.getElementById('playerSurname');
-const playerAge = document.getElementById('playerAge');
-const starPlayer = document.getElementById('starPLayer');
-
-const favouritePlayers = helperFunctions.getList('favouritePlayers');
 let selectedPlayer = null;
+let playerAge = null;
+let playerSurname = null;
+let playerName = null;
+let playerImg = null;
+let favouritePlayers = null;
 
-async function load() {
+let starPlayer = null;
+
+function loadDocument() {
+    playerImg = document.getElementById('playerImg');
+    playerName = document.getElementById('playerName');
+    playerSurname = document.getElementById('playerSurname');
+    playerAge = document.getElementById('playerAge');
+    starPlayer = document.getElementById('starPLayer');
+
+    favouritePlayers = helperFunctions.getList('favouritePlayers');
+}
+
+function setStarEvent() {
+    starPlayer.addEventListener('click', () => {
+        if (starPlayer.innerText === 'star') {
+            starPlayer.innerText = 'star_border';
+            favouritePlayers.list = helperFunctions.removePlayerFromLocalStorageList('favouritePlayers', favouritePlayers.list, selectedPlayer.player.id);
+            helperFunctions.removePlayerFromMyTeam(favouritePlayers.list);
+        } else {
+            starPlayer.innerText = 'star';
+            favouritePlayers.list.push(selectedPlayer);
+            helperFunctions.saveList('favouritePlayers', favouritePlayers.list);
+        }
+    });
+}
+
+export default async function loadPlayer(playerId) {
+    loadDocument();
+    setStarEvent();
+
     const dataToPass = {
-        id: 47193,
+        id: playerId,
         league: 140,
         season: 2020,
     };
-    const response = await helperFunctions.doRequest('https://v3.football.api-sports.io/players', dataToPass, 'GET');
+    // const response = await helperFunctions.doRequest('https://v3.football.api-sports.io/players', dataToPass, 'GET');
+    const response = require('../json/Player.json');
     const { error } = response;
 
     // Si no errors
@@ -43,23 +71,3 @@ async function load() {
         console.log(error.join(' '));
     }
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    load();
-
-    if (favouritePlayers.status === false) {
-        favouritePlayers.list = [];
-    }
-});
-
-starPlayer.addEventListener('click', () => {
-    if (starPlayer.innerText === 'star') {
-        starPlayer.innerText = 'star_border';
-        favouritePlayers.list = helperFunctions.removePlayerFromLocalStorageList('favouritePlayers', favouritePlayers.list, selectedPlayer.player.id);
-        helperFunctions.removePlayerFromMyTeam(favouritePlayers.list);
-    } else {
-        starPlayer.innerText = 'star';
-        favouritePlayers.list.push(selectedPlayer);
-        helperFunctions.saveList('favouritePlayers', favouritePlayers.list);
-    }
-});

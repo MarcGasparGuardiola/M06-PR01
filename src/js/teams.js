@@ -1,3 +1,5 @@
+import loadPlayer from './loadPlayer';
+
 async function doRequest(url, params, verb, jsonResponse) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
@@ -76,13 +78,13 @@ async function loadPlayersFromTeam(teamId) {
             tablePlayers.insertAdjacentHTML('beforeEnd', str);
         });
 
-        const playerRow = document.getElementById('teams');
-        teamRow.addEventListener('click', (e) => {
+        const playerRow = document.getElementById('tablePlayers');
+        playerRow.addEventListener('click', (e) => {
             const closestTeam = e.target.closest('tr');
-            const teamId = closestTeam.getElementsByTagName('td')[0].innerText;
-            loadPlayersFromTeam(teamId);
+            const playerId = closestTeam.getElementsByTagName('td')[0].innerText;
+            // TODO use loadPLayer function
+            loadPlayer(playerId);
         });
-
     } else {
         console.log(error.join(' '));
     }
