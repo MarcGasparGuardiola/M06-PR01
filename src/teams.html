@@ -28,7 +28,7 @@
     <a href="./myteam.html">MyTeam</a>
     <div class="container">
         <div class="row">
-            <div class="col-4">
+            <div class="col-4" id="teams">
                 <table class="striped">
                     <thead>
                         <tr>
@@ -37,18 +37,31 @@
                         </tr>
                     </thead>
         
-                    <tbody id="tableBody">
+                    <tbody id="tableTeams">
                     </tbody>
                 </table>
             </div>
             <div class="col-4">
+                <table class="striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Surname</th>
+                            <th>Image</th>
+                        </tr>
+                    </thead>
+        
+                    <tbody id="tablePlayers">
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-4" style="border-right: 1px solid black;">
                 <img src="img/defaultImage.jpg" alt="" id="playerImg">
                 <i class="material-icons" id="starPLayer">star_border</i>
                 <p id="playerName"></p>
                 <p id="playerSurname"></p>
                 <p id="playerAge"></p>
             </div>
-            <div class="col-4"></div>
         </div>
     </div>
 </body>

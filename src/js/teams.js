@@ -28,21 +28,32 @@ async function doRequest(url, params, verb, jsonResponse) {
 
         xhr.open(verb, finalUrl);
 
-        xhr.setRequestHeader('x-rapidapi-key', 'ebfa151c4637db0f313a47b7489e3770');
+        xhr.setRequestHeader('x-rapidapi-key', '849bc3ae6284787a953923c8e908e38a');
         xhr.setRequestHeader('x-rapidapi-host', 'v3.football.api-sports.io');
 
         xhr.send();
     });
 }
 
-const itemHTML = `
-    <tr>
+const itemTeam = `
+    <tr >
+        <td hidden>$$TEAM_ID$$</td>
         <td style="align-text: center">$$TEAM_NAME$$</td>
         <td><img src="$$TEAM_LOGO$$" style="width: 125px; height: 125px"></td>
     </tr>
 `;
 
-const table = document.getElementById('tableBody');
+const itemPlayer = `
+    <tr >
+        <td hidden>$$PLAYER_ID$$</td>
+        <td style="align-text: center">$$PLAYER_NAME$$</td>
+        <td><img src="$$PLAYER_IMG$$" style="width: 125px; height: 125px"></td>
+    </tr>
+`;
+
+const tableTeams = document.getElementById('tableTeams');
+const tablePlayers = document.getElementById('tablePlayers');
+
 let team = null;
 
 async function load() {
@@ -60,10 +71,18 @@ async function load() {
         
         response.response.forEach((team) => {
             let str = '';
-            str = itemHTML.replace('$$TEAM_NAME$$', team.team.name);
+            str = itemTeam.replace('$$TEAM_NAME$$', team.team.name);
+            str = str.replace(`$$TEAM_ID$$`, team.team.id)
             str = str.replace('$$TEAM_LOGO$$', team.team.logo);
-            table.insertAdjacentHTML('beforeEnd', str);
+            tableTeams.insertAdjacentHTML('beforeEnd', str);
         });
+
+        const teamRow = document.getElementById('teams');
+        teamRow.addEventListener('click', (e) => {
+            const closestTeam = e.target.closest('tr');
+            const teamId = closestTeam.getElementsByTagName('td')[0].innerText;
+        })
+        
         
     } else {
         console.log(error.join(' '));
@@ -72,6 +91,46 @@ async function load() {
     console.log(response);
 }
 
+async function loadPlayersFromTeam(team) {
+    const dataToPass = {
+        team: team,
+        league: 140,
+        season: 2020,
+    };
+    const response = await doRequest('https://v3.football.api-sports.io/players', dataToPass, 'GET');
+    const { error } = response;
+
+    console.log(response);
+    // Si no errors
+    if (error !== []) {
+        
+        response.response.forEach((team) => {
+            let str = '';
+            str = itemPlayer.replace('$$PLAYER_NAME$$', team.player.name);
+            str = str.replace(`$$PLAYER_ID$$`, team.player.id)
+            str = str.replace('$$PLAYER_IMG$$', team.player.img);
+            tableTeams.insertAdjacentHTML('beforeEnd', str);
+        });
+
+        /*
+        const teamRow = document.getElementById('teams');
+        
+        teamRow.addEventListener('click', (e) => {
+            const closestTeam = e.target.closest('tr');
+            const player = closestTeam.getElementsByTagName('td')[0].innerText;
+        })
+        */
+        
+        
+    } else {
+        console.log(error.join(' '));
+    }
+
+    console.log(response);
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
     load();
 });
+
