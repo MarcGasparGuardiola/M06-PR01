@@ -54,25 +54,59 @@ const itemPlayer = `
 const tableTeams = document.getElementById('tableTeams');
 const tablePlayers = document.getElementById('tablePlayers');
 
-let team = null;
-
-async function load() {
+async function loadPlayersFromTeam(teamId) {
     const dataToPass = {
-        country: "Spain",
+        team: teamId,
         league: 140,
         season: 2020,
     };
-    const response = await doRequest('https://v3.football.api-sports.io/teams', dataToPass, 'GET');
+    // const response = await doRequest('https://v3.football.api-sports.io/players', dataToPass, 'GET');
+    const response = require('../json/Players.json');
     const { error } = response;
 
     console.log(response);
     // Si no errors
     if (error !== []) {
-        
+        response.response.forEach((player) => {
+            console.log('player');
+            let str = '';
+            str = itemPlayer.replace('$$PLAYER_NAME$$', player.player.name);
+            str = str.replace('$$PLAYER_ID$$', player.player.id);
+            str = str.replace('$$PLAYER_IMG$$', player.player.photo);
+            tablePlayers.insertAdjacentHTML('beforeEnd', str);
+        });
+
+        const playerRow = document.getElementById('teams');
+        teamRow.addEventListener('click', (e) => {
+            const closestTeam = e.target.closest('tr');
+            const teamId = closestTeam.getElementsByTagName('td')[0].innerText;
+            loadPlayersFromTeam(teamId);
+        });
+
+    } else {
+        console.log(error.join(' '));
+    }
+
+    console.log(response);
+}
+
+async function load() {
+    const dataToPass = {
+        country: 'Spain',
+        league: 140,
+        season: 2020,
+    };
+    // const response = await doRequest('https://v3.football.api-sports.io/teams', dataToPass, 'GET');
+    const response = require('../json/Teams.json');
+    const { error } = response;
+
+    console.log(response);
+    // Si no errors
+    if (error !== []) {
         response.response.forEach((team) => {
             let str = '';
             str = itemTeam.replace('$$TEAM_NAME$$', team.team.name);
-            str = str.replace(`$$TEAM_ID$$`, team.team.id)
+            str = str.replace('$$TEAM_ID$$', team.team.id)
             str = str.replace('$$TEAM_LOGO$$', team.team.logo);
             tableTeams.insertAdjacentHTML('beforeEnd', str);
         });
@@ -81,56 +115,15 @@ async function load() {
         teamRow.addEventListener('click', (e) => {
             const closestTeam = e.target.closest('tr');
             const teamId = closestTeam.getElementsByTagName('td')[0].innerText;
-        })
-        
-        
-    } else {
-        console.log(error.join(' '));
-    }
-
-    console.log(response);
-}
-
-async function loadPlayersFromTeam(team) {
-    const dataToPass = {
-        team: team,
-        league: 140,
-        season: 2020,
-    };
-    const response = await doRequest('https://v3.football.api-sports.io/players', dataToPass, 'GET');
-    const { error } = response;
-
-    console.log(response);
-    // Si no errors
-    if (error !== []) {
-        
-        response.response.forEach((team) => {
-            let str = '';
-            str = itemPlayer.replace('$$PLAYER_NAME$$', team.player.name);
-            str = str.replace(`$$PLAYER_ID$$`, team.player.id)
-            str = str.replace('$$PLAYER_IMG$$', team.player.img);
-            tableTeams.insertAdjacentHTML('beforeEnd', str);
+            loadPlayersFromTeam(teamId);
         });
-
-        /*
-        const teamRow = document.getElementById('teams');
-        
-        teamRow.addEventListener('click', (e) => {
-            const closestTeam = e.target.closest('tr');
-            const player = closestTeam.getElementsByTagName('td')[0].innerText;
-        })
-        */
-        
-        
     } else {
         console.log(error.join(' '));
     }
 
     console.log(response);
 }
-
 
 document.addEventListener('DOMContentLoaded', () => {
     load();
 });
-

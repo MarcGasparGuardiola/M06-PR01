@@ -31,7 +31,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             filename: 'teams.html',
             template: './src/teams.html',
-            chunks: ['polyfill', 'teams'],
+            chunks: ['polyfill', 'teams', 'loadplayer'],
         }),
         new HtmlWebpackPlugin({
             filename: 'loadplayer.html',
