@@ -1,6 +1,8 @@
 // import '../css/index.css';
 import * as helperFunctions from './helpers/helper';
 
+require('../css/loadplayer.css');
+
 let selectedPlayer = null;
 let playerAge = null;
 let playerSurname = null;
@@ -18,6 +20,10 @@ function loadDocument() {
     starPlayer = document.getElementById('starPLayer');
 
     favouritePlayers = helperFunctions.getList('favouritePlayers');
+
+    if (favouritePlayers.status === false) {
+        favouritePlayers.list = [];
+    }
 }
 
 function setStarEvent() {
@@ -49,6 +55,7 @@ export default async function loadPlayer(playerId) {
 
     // Si no errors
     if (error !== []) {
+        //
         starPlayer.removeAttribute('hidden');
         playerImg.src = '';
         playerName.innerText = '';
@@ -61,8 +68,6 @@ export default async function loadPlayer(playerId) {
         playerName.innerText = `Player name: ${selectedPlayer.player.firstname}`;
         playerSurname.innerText = `Player lastname: ${selectedPlayer.player.lastname}`;
         playerAge.innerText = `Age: ${selectedPlayer.player.age}`;
-
-        console.log(favouritePlayers);
         if (helperFunctions.checkPlayerIsInList(favouritePlayers.list, selectedPlayer.player.id)) {
             starPlayer.innerText = 'star';
         } else {

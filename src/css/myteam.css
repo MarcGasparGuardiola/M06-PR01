@@ -20,7 +20,8 @@
     background: url("../img/433.jpg");
     background-size: cover;
     background-color: #09f509;
-    height: 130%;
+    height: 570px;
+    width: 465px;
 }
 
 .border {
@@ -28,9 +29,18 @@
 }
 
 .row-4 {
-    min-height: 22%;
+    min-height: 17%;
 }
 
 .no-margin {
     margin: 0;
+}
+
+.player {
+    cursor: grab;
+}
+
+.white {
+    color: white;
+    background-color: #447c19;
 }

@@ -77,5 +77,7 @@ export function checkPlayerIsInList(list, id) {
 
 export function removePlayerFromMyTeam(id) {
     const myTeam = getList('myTeam');
-    removePlayerFromLocalStorageList('myTeam', myTeam.list, id);
+    if (myTeam.status !== false) {
+        removePlayerFromLocalStorageList('myTeam', myTeam.list, id);
+    }
 }

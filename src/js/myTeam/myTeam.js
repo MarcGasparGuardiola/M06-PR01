@@ -5,7 +5,7 @@ import * as chartFunctions from './radarChart';
 require('../../css/myteam.css');
 
 const playerRow = `
-    <tr draggable="true" data-toggle="modal" data-target="#playerModal">
+    <tr class="player" draggable="true" data-toggle="modal" data-target="#playerModal">
         <td><img src="$$PLAYER_IMG$$" style="width: 75; height: 75px;"></td>
         <td>$$PLAYER_NAME$$</td>
         <td>$$PLAYER_LASTNAME$$</td>
@@ -57,7 +57,7 @@ const favouritePlayers = { list: mockPlayers, status: true };
 let myTeam = helperFunctions.getList('myTeam').list ? helperFunctions.getList('myTeam').list : [];
 
 function getTargetDiv(position) {
- 
+
     switch (position) {
         case 'Attacker':
             return document.getElementById('attackers');
@@ -157,7 +157,6 @@ function setOpenModal() {
             const closestTr = e.target.closest('tr');
             const id = closestTr.getElementsByTagName('td')[5].innerText;
             idDraged = id;
-            console.log(idDraged);
             event.dataTransfer.setData("Text", event.target.id);
         })
     });
@@ -181,7 +180,6 @@ function checkNumberOfPlayers() {
 function checkPositionOfPlayer(position) {
     const numberOfPlayersInPosition = myTeam.filter((player) => player.statistics[player.statistics.length - 1].games.position === position).length
 
-    console.log(numberOfPlayersInPosition);
     switch (position) {
         case 'Attacker':
             return numberOfPlayersInPosition < maxAttackers;
@@ -218,7 +216,6 @@ function getMaxOfPosition(position) {
 }
 
 dropZone.addEventListener('drop', (e) => {
-    //console.log(idDraged);
     e.preventDefault();
 
     if (!checkNumberOfPlayers()) {
@@ -244,7 +241,6 @@ dropZone.addEventListener('drop', (e) => {
     const closestDiv = e.target.closest('div');
     if (!helperFunctions.checkPlayerIsInList(myTeam, player.player.id)) {
         myTeam.push(player);
-        console.log(myTeam);
         //Save player to myTeam localStorage
         helperFunctions.saveList('myTeam', myTeam);
         closestDiv.insertAdjacentHTML('beforeEnd', str);
@@ -260,9 +256,7 @@ dropZone.addEventListener('click', (e) => {
     if (e.target.matches('div *')) {
         const closestDiv = e.target.closest('div');
         const id = closestDiv.getElementsByTagName('p')[1].innerText;
-        console.log(id);
         myTeam = helperFunctions.removePlayerFromListById(myTeam, id);
-        console.log(myTeam);
         helperFunctions.saveList('myTeam', myTeam);
         const parentDiv = closestDiv.parentElement;
         parentDiv.removeChild(closestDiv);

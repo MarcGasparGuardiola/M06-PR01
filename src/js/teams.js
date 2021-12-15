@@ -43,7 +43,7 @@ const itemTeam = `
     <tr class="team row">
         <td hidden>$$TEAM_ID$$</td>
         <td class="col-4" style="align-text: center">$$TEAM_NAME$$</td>
-        <td class="col-8 logoCol"><img src="$$TEAM_LOGO$$" style="width: 125px; height: 125px"></td>
+        <td class="col-8 logoCol"><img src="$$TEAM_LOGO$$" style="width: 100px; height: 100px"></td>
     </tr>
 `;
 
@@ -72,6 +72,7 @@ async function loadPlayersFromTeam(teamId) {
     console.log(response);
     // Si no errors
     if (error !== []) {
+        tablePlayerHead.removeAttribute('hidden');
         response.response.forEach((player) => {
             console.log('player');
             let str = '';
@@ -107,7 +108,6 @@ async function load() {
     console.log(response);
     // Si no errors
     if (error !== []) {
-        tablePlayerHead.setAttribute('hidden', false);
         response.response.forEach((team) => {
             let str = '';
             str = itemTeam.replace('$$TEAM_NAME$$', team.team.name);

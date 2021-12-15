@@ -6,12 +6,20 @@
     cursor: pointer;
 }
 
-.team {
-    border-bottom: 1px solid black;
+.team, .player {
     padding-bottom: 15px;
     padding-top: 25px;
+    display: table-row;
 }
 
 .logoCol {
     padding-left: 25px;
+}
+
+#player {
+    padding: 5%;
+}
+
+#starPLayer {
+    color: yellow;
 }
