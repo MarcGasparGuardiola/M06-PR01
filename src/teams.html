@@ -12,15 +12,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
-        
-    <style>
-        .col-4 {
-            border: 1px solid black;    
-        }
-        #starPLayer {
-            cursor: pointer;
-        }
-    </style>
 </head>
 
 <!-- muestra solo la imagen, nombre, apellido y edad -->
@@ -28,7 +19,7 @@
     <a href="./myteam.html">MyTeam</a>
     <div class="container">
         <div class="row">
-            <div class="col-4" id="teams">
+            <div class="col-4 border" id="teams">
                 <table class="striped">
                     <thead>
                         <tr>
@@ -41,9 +32,9 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-4">
+            <div class="col-4 border">
                 <table class="striped">
-                    <thead>
+                    <thead hidden id="tablePlayersHead">
                         <tr>
                             <th>Name</th>
                             <th>Surname</th>
@@ -55,9 +46,9 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-4" style="border-right: 1px solid black;">
+            <div class="col-4 border" style="border-right: 1px solid black;">
                 <img src="img/defaultImage.jpg" alt="" id="playerImg">
-                <i class="material-icons" id="starPLayer">star_border</i>
+                <i hidden class="material-icons" id="starPLayer">star_border</i>
                 <p id="playerName"></p>
                 <p id="playerSurname"></p>
                 <p id="playerAge"></p>

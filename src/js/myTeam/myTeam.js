@@ -2,6 +2,8 @@
 import * as helperFunctions from '../helpers/helper';
 import * as chartFunctions from './radarChart';
 
+require('../../css/myteam.css');
+
 const playerRow = `
     <tr draggable="true" data-toggle="modal" data-target="#playerModal">
         <td><img src="$$PLAYER_IMG$$" style="width: 75; height: 75px;"></td>

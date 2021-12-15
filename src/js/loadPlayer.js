@@ -49,6 +49,7 @@ export default async function loadPlayer(playerId) {
 
     // Si no errors
     if (error !== []) {
+        starPlayer.removeAttribute('hidden');
         playerImg.src = '';
         playerName.innerText = '';
         playerSurname.innerText = '';
@@ -68,6 +69,7 @@ export default async function loadPlayer(playerId) {
             starPlayer.innerText = 'star_border';
         }
     } else {
+        starPlayer.setAttribute('hidden', true);
         console.log(error.join(' '));
     }
 }

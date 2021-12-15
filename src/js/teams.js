@@ -1,5 +1,7 @@
 import loadPlayer from './loadPlayer';
 
+require('../css/teams.css');
+
 async function doRequest(url, params, verb, jsonResponse) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
@@ -38,23 +40,24 @@ async function doRequest(url, params, verb, jsonResponse) {
 }
 
 const itemTeam = `
-    <tr >
+    <tr class="team row">
         <td hidden>$$TEAM_ID$$</td>
-        <td style="align-text: center">$$TEAM_NAME$$</td>
-        <td><img src="$$TEAM_LOGO$$" style="width: 125px; height: 125px"></td>
+        <td class="col-4" style="align-text: center">$$TEAM_NAME$$</td>
+        <td class="col-8 logoCol"><img src="$$TEAM_LOGO$$" style="width: 125px; height: 125px"></td>
     </tr>
 `;
 
 const itemPlayer = `
-    <tr >
+    <tr class="player row">
         <td hidden>$$PLAYER_ID$$</td>
-        <td style="align-text: center">$$PLAYER_NAME$$</td>
-        <td><img src="$$PLAYER_IMG$$" style="width: 125px; height: 125px"></td>
+        <td class="col-4" style="align-text: center">$$PLAYER_NAME$$</td>
+        <td class="col-8 logoCol"><img src="$$PLAYER_IMG$$" style="width: 125px; height: 125px"></td>
     </tr>
 `;
 
 const tableTeams = document.getElementById('tableTeams');
 const tablePlayers = document.getElementById('tablePlayers');
+const tablePlayerHead = document.getElementById('tablePlayersHead');
 
 async function loadPlayersFromTeam(teamId) {
     const dataToPass = {
@@ -82,7 +85,6 @@ async function loadPlayersFromTeam(teamId) {
         playerRow.addEventListener('click', (e) => {
             const closestTeam = e.target.closest('tr');
             const playerId = closestTeam.getElementsByTagName('td')[0].innerText;
-            // TODO use loadPLayer function
             loadPlayer(playerId);
         });
     } else {
@@ -105,6 +107,7 @@ async function load() {
     console.log(response);
     // Si no errors
     if (error !== []) {
+        tablePlayerHead.setAttribute('hidden', false);
         response.response.forEach((team) => {
             let str = '';
             str = itemTeam.replace('$$TEAM_NAME$$', team.team.name);
@@ -128,4 +131,5 @@ async function load() {
 
 document.addEventListener('DOMContentLoaded', () => {
     load();
+    tablePlayerHead.setAttribute('hidden', true);
 });
