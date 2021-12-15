@@ -18,13 +18,7 @@ function isUserName(userName) {return regex.userName.test(userName)}
 function isEmail(email) {return regex.email.test(email)}
 function isPassword(password) {return regex.password.test(password)}
 //TODO validacio tot el formulari
-function allValid() {
-    for (let index = 0; index < forms.length; index++) {
-        if (forms[index].className.includes("is-valid")) {
-            console.log("ok")
-        }
-    }
-}
+
 
 function setGreen(input) {
     input.className = "form-control is-valid";
@@ -50,19 +44,21 @@ forms.addEventListener("keyup", (e) => {
             break;
 
     }
-    allValid()
 })
 
-
+if (userName.className.includes("valid")) {
+    console.log('holas')
+}
 submit.addEventListener('click', (e) => {
     e.preventDefault()
     postRequest()
     getRequest()
+    
     let user = new User(userName.value, fullName.value, email.value, password.value)
     users.push(user)
     console.log(users)
     sessionStorage.setItem('usersArray', JSON.stringify(users))
-    window.location.href = '../../teams.html'
+    //window.location.href = '../../teams.html'
 })
 
 
