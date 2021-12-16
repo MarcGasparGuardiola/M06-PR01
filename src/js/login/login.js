@@ -1,4 +1,5 @@
 import {User} from "../User"
+import swal from 'sweetalert'
 
 const forms = document.querySelector('.needs-validation')
 const fullName = document.getElementById("fullName");
@@ -14,7 +15,10 @@ const regex = {
     password: /^[A-Za-z0-9]{5,}$/,
 }
 
-function isUserName(userName) {return regex.userName.test(userName)}
+function isUserName(userName) {
+
+    return regex.userName.test(userName)
+}
 function isEmail(email) {return regex.email.test(email)}
 function isPassword(password) {return regex.password.test(password)}
 //TODO validacio tot el formulari
@@ -46,19 +50,34 @@ forms.addEventListener("keyup", (e) => {
     }
 })
 
-if (userName.className.includes("valid")) {
+function validateAll(userName, email, password) {
+    if (isUserName(userName.value) && isEmail(email.value) && isPassword(password.value)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+if (isUserName(userName) && isEmail(email) && isPassword(password)) {
     console.log('holas')
 }
 submit.addEventListener('click', (e) => {
-    e.preventDefault()
-    postRequest()
-    getRequest()
     
-    let user = new User(userName.value, fullName.value, email.value, password.value)
-    users.push(user)
-    console.log(users)
-    sessionStorage.setItem('usersArray', JSON.stringify(users))
-    //window.location.href = '../../teams.html'
+    if (validateAll(userName, email, password)) {
+        postRequest()
+        getRequest()
+        
+        let user = new User(userName.value, fullName.value, email.value, password.value)
+        users.push(user)
+        console.log(users)
+        sessionStorage.setItem('usersArray', JSON.stringify(users))
+        window.location.href = '../../teams.html'
+    } else {
+        swal("Comprueba todos los datos")
+    }
+    e.preventDefault()
+    
+    
 })
 
 
