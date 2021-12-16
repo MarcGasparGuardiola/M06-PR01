@@ -1,0 +1,12 @@
+#playerImg {
+    border: 1px solid rgb(119, 116, 116);
+    border-radius: 4%;
+    margin-bottom: 4%;
+}
+
+#starPLayer {
+    border: 1px solid rgb(119, 116, 116);
+    border-radius: 25%;
+    background-color: rgb(92, 102, 194);
+}
+

@@ -1,0 +1,46 @@
+.parent {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.child-right {
+    width: inherit;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.height100 {
+    height: 100%;
+}
+
+#dropZone {
+    background: url("../img/433.jpg");
+    background-size: cover;
+    background-color: #09f509;
+    height: 570px;
+    width: 465px;
+}
+
+.border {
+    border: 1px solid black;
+}
+
+.row-4 {
+    min-height: 17%;
+}
+
+.no-margin {
+    margin: 0;
+}
+
+.player {
+    cursor: grab;
+}
+
+.white {
+    color: white;
+    background-color: #447c19;
+}
