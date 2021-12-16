@@ -13,14 +13,14 @@ module.exports = {
         helper: './src/js/helpers/helper.js',
     },
     output: {
-        path: path.resolve(__dirname, 'build', 'target'),
+        path: path.resolve(__dirname, 'docs', 'target'),
         publicPath: '/',
         filename: '[name].bundle.js',
         chunkFilename: '[id].bundle_[chunkhash].js',
         sourceMapFilename: '[file].map',
     },
     devServer: {
-        static: './dist',
+        static: './docs',
     },
     plugins: [
         new HtmlWebpackPlugin({
